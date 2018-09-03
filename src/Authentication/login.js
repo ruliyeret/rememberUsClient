@@ -6,6 +6,7 @@ import Card from "../Common/card/Card";
 import CardSection from "../Common/card/Card-Section";
 import Input from "../Common/input";
 import Spinner from "../Common/spiner";
+import { Actions } from 'react-native-router-flux';
 
 class LoginForm extends Component {
     state = { email: '', password: '', error: '', loading: false };
@@ -42,9 +43,12 @@ class LoginForm extends Component {
             return <Spinner size="small" />;
         }
         return (
+
             <Button onPress={this.onButtonPress.bind(this)}>
                 Login
             </Button>
+
+
         );
     }
 
@@ -77,6 +81,7 @@ class LoginForm extends Component {
                 <CardSection>
                     {this.renderButton()}
                 </CardSection>
+                <Text onPress={() => Actions.gray()} style={styles.signUp}> Sign up</Text>
             </Card>
         );
     }
@@ -87,6 +92,10 @@ const styles = {
         fontSize: 20,
         alignSelf: 'center',
         color: 'red'
+    },
+    signUp:{
+        textAlign: 'center',
+        fontSize: 15
     }
 };
 
