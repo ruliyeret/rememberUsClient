@@ -42,7 +42,7 @@ export default class Login extends React.Component {
                         <Button onPress={() => firebase.auth().signOut()}>
                             Log Out
                         </Button>
-                        <h1>wellcom ruli</h1>
+
                     </CardSection>
                 );
             case false:

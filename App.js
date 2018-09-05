@@ -1,6 +1,6 @@
 import React from 'react';
 import { Router, Scene } from 'react-native-router-flux';
-import Test from "./routeTest"
+import Test from "./AcountOption"
 
 import Login from "./index";
 export default class App extends React.Component {
