@@ -81,7 +81,7 @@ class LoginForm extends Component {
                 <CardSection>
                     {this.renderButton()}
                 </CardSection>
-                <Text onPress={() => Actions.gray()} style={styles.signUp}> Sign up</Text>
+
             </Card>
         );
     }
@@ -92,11 +92,8 @@ const styles = {
         fontSize: 20,
         alignSelf: 'center',
         color: 'red'
-    },
-    signUp:{
-        textAlign: 'center',
-        fontSize: 15
     }
+
 };
 
 export default LoginForm;

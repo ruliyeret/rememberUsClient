@@ -6,6 +6,8 @@ import {View} from 'react-native'
 import Spinner from "./src/Common/spiner";
 import CardSection from "./src/Common/card/Card-Section";
 import Button from "./src/Common/Button/Button";
+import SighUpButtom from "./src/createAcount/sighUpButtom";
+
 
 
 export default class Login extends React.Component {
@@ -53,12 +55,29 @@ export default class Login extends React.Component {
     }
     render() {
         return (
-            <View>
-                <Header  headerText = "התחברות"></Header>
+            <View style={styles.container}>
+                <Header  styles={styles.Header} headerText = "התחברות"></Header>
+                <View styles={styles.Body}>
                 {this.renderContent()}
+                </View>
+                <SighUpButtom style={styles.Down}></SighUpButtom>
             </View>
         );
     }
 }
+const styles = {
+    container:{
+        flex:1
+    },
+    Header:{
+        flex:1
+    },
+    Body:{
+        flex:1
+    },
+    Down:{
+        flex:1
+    }
 
+}
 

@@ -4,25 +4,29 @@ import {
     Text,
     View,
     ImageBackground,
+    TouchableOpacity,
     Modal,
     TouchableHighlight
 } from 'react-native';
-import {DescriptionOption} from "./src/description/descriptionOption";
-import Description from "./src/description/description";
+import {DescriptionOption} from "../description/descriptionOption";
+import Description from "../description/description";
+import {Actions} from "react-native-router-flux";
 
 
-class Test extends Component {
+class AcountOption extends Component {
     state = {
-        modalVisible: false,
+        modalVisible: false
+
     }
     toggleModal(visible) {
         this.setState({ modalVisible: visible });
     }
+
     render() {
         return (
             <ImageBackground
                 style={styles.container}
-                source={require('./wall.jpg')}
+                source={require('../../wall.jpg')}
                 imageStyle={{resizeMode: 'cover'}}
             >
                 <View style={styles.container}>
@@ -41,17 +45,21 @@ class Test extends Component {
                             </TouchableHighlight>
                         </View>
                     </Modal>
-                    <View style={styles.free}>
-                        <Text style={styles.text}>{'FREE \n \n'}</Text>
-                        <Description description={DescriptionOption.freeDescription()} style={styles.textDescription}></Description>
 
+                    <View style={styles.free}>
+                       <TouchableOpacity onPress={() => Actions.sighUpFree()}>
+                          <Text style={styles.text}>{'FREE \n \n'}</Text>
+                       </TouchableOpacity>
+                        <Description description={DescriptionOption.freeDescription()} style={styles.textDescription}></Description>
                         <View  style={styles.circel}>
                             <Text onPress = {()=> {this.toggleModal(true)}}> about us</Text>
                         </View>
                     </View>
                     <View style={styles.medium}>
+                        <TouchableOpacity onPress={() => Actions.sighUpFree()}>
                         <Text style={styles.text}>{'MEDIUM \n \n'}</Text>
                         <Description description={DescriptionOption.freeDescription()} style={styles.textDescription}></Description>
+                        </TouchableOpacity>
 
                     </View>
                     <View style={styles.premium}>
@@ -77,7 +85,7 @@ const styles = StyleSheet.create({
     },
     textDescription:{
       fontSize:23,
-        textAlign: "center"
+        // textAlign: "center"
     },
     modal: {
         flex: 1,
@@ -105,9 +113,9 @@ const styles = StyleSheet.create({
     },
     text:{
          fontSize: 42,
-         textAlign:'center',
+         // textAlign:'center',
          top:20
     }
 });
 
-export default Test;
+export default AcountOption;
