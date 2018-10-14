@@ -1,9 +1,12 @@
 import React from 'react';
 import { Router, Scene } from 'react-native-router-flux';
-import Login from "./index";
+import AcountOption from "./src/AcountOptions/AcountOption"
+import Login from "./src/Authentication/Autontication";
 import SignUpView from "./src/createAcount/Sigh-Up-View";
-import Home from "./src/Home/home";
+import Home, {HomeScreen} from "./src/Home/Home";
 import AcountOptions from "./src/AcountOptions/AcountOptionsWithReactElements";
+import HeaderApp from "./src/Home/Header";
+import {GallerySlide} from "./src/Home/galary/galarySlide"
 export default class App extends React.Component {
 
     render() {
@@ -25,14 +28,22 @@ export default class App extends React.Component {
                     <Scene
                         key="sighUpFree"
                         component={SignUpView}
-                        title="free acount"
+                        title="create acount"
+
+                    >
+                    </Scene>
+
+                    <Scene
+                        key="HomePage"
+                        component={HomeScreen}
+                        title="Home"
 
                     >
                     </Scene>
                     <Scene
-                        key="Home"
-                        component={Home}
-                        title="Home"
+                        key="galleryPage"
+                        component={GallerySlide}
+                        title="gallery"
 
                     >
                     </Scene>
