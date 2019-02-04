@@ -6,27 +6,39 @@ import Card from "../Common/card/Card";
 import CardSection from "../Common/card/Card-Section";
 import Input from "../Common/input";
 import Spinner from "../Common/spiner";
+
 import { Actions } from 'react-native-router-flux';
 import Logo from "./Logo";
 import Form from "./Form";
+import Menu from "../Home/Menu";
 
 class LoginForm extends Component {
 
-
+    constructor(){
+        super();
+        this.state={
+            locationX:0,
+            locationY:0
+        }
+    }
     signup() {
         Actions.sighUp()
     }
 
+
     render() {
         return(
             <View style={styles.container}>
+
                 <Logo/>
-                <Form type="Login"/>
+                <Form/>
                 <View style={styles.signupTextCont}>
                     <Text style={styles.signupText}>Don't have an account yet?</Text>
                     <TouchableOpacity onPress={this.signup}><Text style={styles.signupButton}> Sign up</Text></TouchableOpacity>
                 </View>
+
             </View>
+
         );
     }
 }

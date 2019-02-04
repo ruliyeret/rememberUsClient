@@ -27,7 +27,7 @@ class AcountOption extends Component {
             <ImageBackground
                 style={styles.container}
                 source={require('../../wall.jpg')}
-                imageStyle={{resizeMode: 'cover'}}
+                imageStyle={{}}
             >
                 <View style={styles.container}>
                     <Modal animationType={"slide"} transparent={false}

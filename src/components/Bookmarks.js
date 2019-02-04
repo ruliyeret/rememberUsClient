@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {View, Text, SafeAreaView} from 'react-native';
-import PropTypes from 'prop-types';
 
-class Likes extends Component {
+
+class Bookmarks extends Component {
     render() {
         return (
             <SafeAreaView style={{
@@ -10,10 +10,10 @@ class Likes extends Component {
                 alignItems: 'center',
                 justifyContent: 'center'
             }}>
-                <Text>Likes</Text>
+                <Text>Bookmarks</Text>
             </SafeAreaView>
         );
     }
 }
 
-export default Likes;
+export default Bookmarks;

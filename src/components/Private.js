@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {View, Text, SafeAreaView} from 'react-native';
-import PropTypes from 'prop-types';
 
-class Profile extends Component {
+
+class Private extends Component {
     render() {
         return (
             <SafeAreaView style={{
@@ -10,10 +10,10 @@ class Profile extends Component {
                 alignItems: 'center',
                 justifyContent: 'center'
             }}>
-                <Text>Profile</Text>
+                <Text>Private</Text>
             </SafeAreaView>
         );
     }
 }
 
-export default Profile;
+export default Private;

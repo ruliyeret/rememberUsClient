@@ -60,22 +60,7 @@ export default class Login extends React.Component {
         );
     }
 }
-const styles = {
-    container:{
-        flex:1
 
-    },
-    Header:{
-        flex:1
-    },
-    Body:{
-        flex:1
-    },
-    Down:{
-        flex:1
-    }
-
-}
 
 
 

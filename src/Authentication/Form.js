@@ -4,50 +4,75 @@ import {
     Text,
     View,
     TextInput,
-    TouchableOpacity
+    Alert,
+    AsyncStorage,
+    TouchableOpacity,
+    KeyboardAvoidingView, ActivityIndicator
 } from 'react-native';
+import SweetAlert from 'react-native-sweet-alert';
 import firebase from "firebase";
 import Spinner from "../Common/spiner";
+import {Actions} from "react-native-router-flux";
+import {RestApi} from "../Home/RestApi/RestApi";
+
 
 export default class Form extends Component {
-    // state = { email: '', password: '', error: '', loading: false };
-    //
-    // onButtonPress() {
-    //     const { email, password } = this.state;
-    //
-    //     this.setState({ error: ' ', loading: true});
-    //
-    //     firebase.auth().signInWithEmailAndPassword(email, password)
-    //         .then(this.onLoginSucess.bind(this))
-    //         .catch(() => {
-    //             firebase.auth().createUserWithEmailAndPassword(email, password)
-    //                 .then(this.onLoginSucess.bind(this))
-    //                 .catch(this.onLoginFail.bind(this));
-    //         });
-    // }
-    //
-    // onLoginFail() {
-    //     this.setState({ error: "Auth error!", loading: false });
-    // }
-    //
-    // onLoginSucess() {
-    //     this.setState({
-    //         email: '',
-    //         password: '',
-    //         loading: false,
-    //         error: ''
-    //     });
-    // }
 
-    renderButton(){
-        // if (this.state.loading) {
-        //     return <Spinner size="small" />;
-        // }
-        {/*<TouchableOpacity style={styles.button} onPress={this.onButtonPress()}>*/}
+    constructor(){
+        super();
+        this.state={
+            username:"",
+            password:"",
+            loginPress:false
+        }
+    }
+    async getUser(userName, password){
+        this.setState({loginPress:true})
+
+        const result = await RestApi.userLogin(userName,password);
+        console.log("this is the result: " + result)
+        if(result.length == 0){
+            Alert.alert(
+                'Incorrect Username',
+                'The username you entered doesnt ' +
+                'appear to belog to an account.' +
+                'Please check your username' +
+                ' and try again.',
+                [
+                    {text: 'Try Again', onPress: () => this.setState({loginPress:false})}
+                ],
+                { cancelable: false }
+            )
+        }
+        else{
+            try {
+                await AsyncStorage.multiSet([
+                    ["userName", result[0].name],
+                    ["password", result[0].password],
+                    ["personId", result[0].person_id.toString()]
+                ]);
+                this.setState({username:"",password:"",loginPress:false})
+                Actions.HomePage();
+            } catch (error) {
+                console.log("error to put the user in storage: " + error)
+                // Error saving data
+            }
+        }
+
+    }
+    checkIfPressed(){
+        if(this.state.loginPress){
+            return (<ActivityIndicator size="large" color="black" />)
+        }
+        return(<Text style={styles.buttonText}>Login</Text>);
+    }
+    loginButton(){
 
         return (
-            <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}>{this.props.type}</Text>
+            <TouchableOpacity style={styles.button} onPress={()=>{
+
+                this.getUser(this.state.username,this.state.password)}}>
+                {this.checkIfPressed()}
             </TouchableOpacity>
 
 
@@ -55,25 +80,34 @@ export default class Form extends Component {
     }
 
     render(){
+
         return(
-            <View style={styles.container}>
-                <TextInput style={styles.inputBox}
-                           underlineColorAndroid='rgba(0,0,0,0)'
-                           placeholder="Email"
-                           placeholderTextColor = "#ffffff"
-                           selectionColor="#fff"
-                           keyboardType="email-address"
-                           onSubmitEditing={()=> this.password.focus()}
-                />
-                <TextInput style={styles.inputBox}
-                           underlineColorAndroid='rgba(0,0,0,0)'
-                           placeholder="Password"
-                           secureTextEntry={true}
-                           placeholderTextColor = "#ffffff"
-                           ref={(input) => this.password = input}
-                />
-                {this.renderButton()}
-            </View>
+                <KeyboardAvoidingView style={styles.container} behavior="padding">
+                    <TextInput style={styles.inputBox}
+                               underlineColorAndroid='rgba(0,0,0,0)'
+                               placeholder="phone number, email or username"
+                               value={this.state.username}
+                               placeholderTextColor = "#ffffff"
+                               selectionColor="#fff"
+                               keyboardType="email-address"
+                               onSubmitEditing = {(event)=>{this.setState({username:event.nativeEvent.text})}}
+                               onChangeText={(username) => this.setState({username})}/>
+
+                    <TextInput style={styles.inputBox}
+                               underlineColorAndroid='rgba(0,0,0,0)'
+                               placeholder="Password"
+                               value={this.state.password}
+                               secureTextEntry={true}
+                               placeholderTextColor = "#ffffff"
+                               ref={(input) => this.password = input}
+                               onSubmitEditing = {(event)=>{this.setState({password:event.nativeEvent.text})}}
+                               onChangeText={(password) => this.setState({password})}
+                    />
+                    {this.loginButton()}
+                </KeyboardAvoidingView>
+
+
+
         )
     }
 }
