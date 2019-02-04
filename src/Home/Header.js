@@ -1,11 +1,11 @@
 import {Header,Icon} from "react-native-elements";
 import React from "react";
-import MenuComponent from "./try";
+
 import {StyleSheet, Text, View} from "react-native";
 
 
 const open =(fun)=>{
-   fun()
+   fun();
 }
 
 const HeaderApp =(props)=>{

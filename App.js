@@ -3,7 +3,7 @@ import { Router, Scene } from 'react-native-router-flux';
 import AcountOption from "./src/AcountOptions/AcountOption"
 import Login from "./src/Authentication/Autontication";
 import SignUpView from "./src/createAcount/Sigh-Up-View";
-import Home, {HomeScreen} from "./src/Home/Home";
+import Home, {HomeScreen} from "./src/Home/home";
 import AcountOptions from "./src/AcountOptions/AcountOptionsWithReactElements";
 import HeaderApp from "./src/Home/Header";
 import {GallerySlide} from "./src/Home/galary/galarySlide"

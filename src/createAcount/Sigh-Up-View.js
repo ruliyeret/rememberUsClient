@@ -5,13 +5,14 @@ import {
     View,
     TextInput,
     TouchableHighlight,
-    Image, TouchableOpacity,ImageBackground
+    Image, TouchableOpacity,ImageBackground,KeyboardAvoidingView
 
 } from 'react-native';
 import {Actions} from "react-native-router-flux";
 import {Button} from "react-native-elements";
+import {User} from "./entity/userName";
+import {Deceased} from "./entity/deceeased";
 
-const remote = 'https://s15.postimg.org/tw2qkvmcb/400px.png';
 
 export default class SignUpView extends Component {
 
@@ -32,23 +33,18 @@ export default class SignUpView extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
+       this.state = {
+           confirmPassword:"",
             fullName: '',
             fullNameErrorMessage:"",
             email   : '',
             emailErrorMessage:"",
-            address:'',
+            phoneNumber:'',
             password: '',
             passwordErrorMessage:"",
             errorMessage: "",
             checkValid:false
         }
-    }
-
-    setErrorMessage(error){
-        this.setState({
-            errorMessage:error
-        });
     }
 
     isEmailValid(){
@@ -67,23 +63,30 @@ export default class SignUpView extends Component {
         return isValid;
     }
 
+    isConfirmPassword(){
+        if(this.state.password == this.state.confirmPassword && this.state.password.length > 6){
+            return  true;
+        }
+        return  false;
+    }
     isPasswordValid() {
         let isValid = true;
         if (this.state.checkValid) {
 
             if (this.state.password == "") {
+                console.log("Invalid password");
                 isValid = false;
             } else if (this.state.password < 6) {
-                this.state.passwordErrorMessage = this.option.password.error;
+                console.log("Invalid password");
                 isValid = false;
             }
         }
         return isValid;
     }
     isNameValid(){
-
         if(this.state.checkValid) {
             if (this.state.fullName == "") {
+                console.log("Invalid Name");
                 return false;
             }
         }
@@ -92,37 +95,43 @@ export default class SignUpView extends Component {
     }
 
     isValidation() {
-        let isValid = true;
-        if(this.state.checkValid) {
-            if(!this.isNameValid() || !this.isEmailValid() || !this.isPasswordValid()) {
-                isValid = false
-            }
-       }
+        this.setState({checkValid:true})
+        if(this.isNameValid() &&
+            this.isEmailValid() &&
+            this.isPasswordValid() &&
+            this.isConfirmPassword()) {
 
-        return isValid;
+            return true
+        }else {
+            return false;
+        }
     }
-    signin = () => {
-        this.state.checkValid = true;
+
+
+    saveUser(){
+        console.log("in saveUserName Function")
         if(this.isValidation()){
-            Actions.HomePage();
-
+            console.log("its mean is valid")
+            let userName =
+                new User(this.state.fullName,this.state.password,this.state.email,new Deceased(),1,"M",new Date(),this.state.phoneNumber);
+            Actions.deceasedForm({userName : userName});
         }else{
-            this.setState({checkValid:true});
-         }
-    };
+            this.setState({checkValid:true })
+        }
 
+}
     render() {
         this.state.errorMessage ="";
         return (
 
             <ImageBackground
-                source={require("./family.jpg")}
-                style={{width: '100%', height: '100%', position: 'absolute',resizeMode: 'cover'}}
+                source={require("../images/sighupview.jpg")}
+                style={{width: '100%', height: '100%', position: 'absolute'}}
             >
 
-                <View style={styles.container}>
+                <KeyboardAvoidingView  style={styles.container} behavior="padding">
 
-                    <View style={this.isNameValid()  ? [styles.inputContainer,styles.valid] :[styles.inputContainer,styles.invalid] }>
+                    <View  style={this.isNameValid()  ? [styles.inputContainer,styles.valid] :[styles.inputContainer,styles.invalid] }>
                         <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/male-user/ultraviolet/50/3498db'}}/>
                         <TextInput style={styles.inputs}
                                    placeholder="Full name"
@@ -131,41 +140,62 @@ export default class SignUpView extends Component {
                                    onChangeText={(fullName) => this.setState({fullName})}/>
 
                     </View>
-                    <Text style={styles.errorMessage}>{this.state.fullNameErrorMessage}</Text>
 
-                    <View style={styles.inputContainer}>
+
+                    <KeyboardAvoidingView behavior="padding" style={styles.inputContainer}>
                         <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/male-user/ultraviolet/50/3498db'}}/>
                         <TextInput style={styles.inputs}
-                                   placeholder="address (optional)"
+                                   placeholder="phoneNumber (optional)"
                                    keyboardType="email-address"
                                    underlineColorAndroid='transparent'
-                                   onChangeText={(address) => this.setState({address})}/>
-                    </View>
+                                   onChangeText={(phoneNumber) => this.setState({phoneNumber})}/>
+                    </KeyboardAvoidingView>
 
-                    <View style={this.isEmailValid() ? [styles.inputContainer,styles.valid] :[styles.inputContainer,styles.invalid] }>
+                    <KeyboardAvoidingView behavior="padding" style={this.isEmailValid() ? [styles.inputContainer,styles.valid] :[styles.inputContainer,styles.invalid] }>
                         <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/message/ultraviolet/50/3498db'}}/>
                         <TextInput style={styles.inputs}
                                    placeholder="Email"
                                    keyboardType="email-address"
                                    underlineColorAndroid='transparent'
                                    onChangeText={(email) => this.setState({email})}/>
-                    </View>
-                    <Text style={styles.errorMessage}>{this.state.emailErrorMessage}</Text>
-                    <View style={this.isPasswordValid()? [styles.inputContainer,styles.valid] :[styles.inputContainer,styles.invalid] }>
+                    </KeyboardAvoidingView>
+
+                    <KeyboardAvoidingView behavior="padding" style={this.isPasswordValid()? [styles.inputContainer,styles.valid] :[styles.inputContainer,styles.invalid] }>
                         <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/key-2/ultraviolet/50/3498db'}}/>
                         <TextInput style={styles.inputs}
                                    placeholder="Password"
                                    secureTextEntry={true}
                                    underlineColorAndroid='transparent'
                                    onChangeText={(password) => this.setState({password})}/>
-                    </View>
-                    <Text style={styles.errorMessage}>{this.state.passwordErrorMessage}</Text>
+                    </KeyboardAvoidingView>
+                    <KeyboardAvoidingView behavior="padding" style={this.isPasswordValid()? [styles.inputContainer,styles.valid] :[styles.inputContainer,styles.invalid] }>
+                        <Image style={styles.inputIcon} source={{uri: 'https://png.icons8.com/key-2/ultraviolet/50/3498db'}}/>
+                        <TextInput style={styles.inputs}
+                                   placeholder="Confirm Password "
+                                   secureTextEntry={true}
+                                   underlineColorAndroid='transparent'
+                                   onChangeText={(confirmPassword) => this.setState({confirmPassword})}/>
+                    </KeyboardAvoidingView>
 
-                    <TouchableOpacity onPress={this.signin}><Text style={styles.signupButton}> Sign in</Text></TouchableOpacity>
-                    <Text style={styles.errorMessage}>{this.state.errorMessage}</Text>
-                </View>
+
+                    <Button
+                        onPress={()=>this.saveUser()}
+                        icon={{ name: 'right' }}
+                        buttonStyle={{
+                            width: 250,
+                            height: 45,
+                            borderColor: "transparent",
+                            borderWidth: 0,
+                            borderRadius: 4
+                        }}
+                        title='NEXT'
+
+                    />
+
+                </KeyboardAvoidingView >
 
             </ImageBackground>
+
 
 
 
@@ -178,12 +208,14 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 1
+
+
 
     },
     inputContainer: {
         borderLeftWidth: 6,
         borderRightWidth: 6,
+
 
         borderBottomColor: '#F5FCFF',
         backgroundColor: '#FFFFFF',
