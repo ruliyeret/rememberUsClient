@@ -78,6 +78,10 @@ export default class Form extends Component {
 
         );
     }
+    forgotPassword(){
+        console.log('forgot password');
+        Actions.loginHelp();
+    }
 
     render(){
 
@@ -103,11 +107,15 @@ export default class Form extends Component {
                                onSubmitEditing = {(event)=>{this.setState({password:event.nativeEvent.text})}}
                                onChangeText={(password) => this.setState({password})}
                     />
+
+
+
                     {this.loginButton()}
+                    <View style={styles.signupTextCont}>
+                        <Text>Forgot your login details?</Text>
+                        <TouchableOpacity onPress={this.forgotPassword}><Text style={styles.signupButton}>Get help sighing in</Text></TouchableOpacity>
+                    </View>
                 </KeyboardAvoidingView>
-
-
-
         )
     }
 }
@@ -118,7 +126,6 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         alignItems: 'center'
     },
-
     inputBox: {
         width:300,
         height:50,
@@ -129,6 +136,19 @@ const styles = StyleSheet.create({
         color:'#ffffff',
         marginVertical: 10
     },
+    signupTextCont : {
+        alignItems:'flex-end',
+        justifyContent :'center',
+        paddingVertical:16,
+        flexDirection:'row'
+    },
+
+    forgotPassword:{
+            color:'#ffffff',
+            fontSize:14,
+            fontWeight:'500'
+
+    },
     button: {
         width:300,
         backgroundColor:'#1c313a',
@@ -136,11 +156,15 @@ const styles = StyleSheet.create({
         marginVertical: 10,
         paddingVertical: 13
     },
+    signupButton: {
+        color:'#ffffff',
+        fontSize:16,
+        fontWeight:'500'
+    },
     buttonText: {
         fontSize:16,
         fontWeight:'500',
         color:'#ffffff',
         textAlign:'center'
     }
-
 });

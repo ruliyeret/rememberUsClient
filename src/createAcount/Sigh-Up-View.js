@@ -72,11 +72,7 @@ export default class SignUpView extends Component {
     isPasswordValid() {
         let isValid = true;
         if (this.state.checkValid) {
-
-            if (this.state.password == "") {
-                console.log("Invalid password");
-                isValid = false;
-            } else if (this.state.password < 6) {
+            if (this.state.password == ""  || this.state.password < 6 ) {
                 console.log("Invalid password");
                 isValid = false;
             }
@@ -84,25 +80,20 @@ export default class SignUpView extends Component {
         return isValid;
     }
     isNameValid(){
-        if(this.state.checkValid) {
-            if (this.state.fullName == "") {
-                console.log("Invalid Name");
-                return false;
-            }
-        }
-        return true;
-
+        return this.state.checkValid ? (this.state.fullName == "") : true;
     }
 
     isValidation() {
-        this.setState({checkValid:true})
+        this.setState({checkValid:true});
         if(this.isNameValid() &&
             this.isEmailValid() &&
             this.isPasswordValid() &&
             this.isConfirmPassword()) {
 
+            console.log('valid');
             return true
         }else {
+            console.log(' not valid');
             return false;
         }
     }
@@ -116,6 +107,7 @@ export default class SignUpView extends Component {
                 new User(this.state.fullName,this.state.password,this.state.email,new Deceased(),1,"M",new Date(),this.state.phoneNumber);
             Actions.deceasedForm({userName : userName});
         }else{
+            console.log("not valid");
             this.setState({checkValid:true })
         }
 

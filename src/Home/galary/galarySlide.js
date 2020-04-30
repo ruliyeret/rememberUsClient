@@ -112,13 +112,10 @@ export class GallerySlide extends React.Component<> {
 
                 onPanResponderRelease: (event, gestureState) =>
                 {
-                    console.log("aaaa")
-
                     let x = event.nativeEvent.locationX.toFixed(2);
                     let y = event.nativeEvent.locationY.toFixed(2);
 
                     if(this.state.editTag) {
-                        console.log("here")
                         this.setState({
                             editTagText: "",
                             locationX: event.nativeEvent.locationX.toFixed(2),

@@ -1,84 +1,206 @@
 import HeaderApp from "./Header";
 import React, { Component } from 'react';
-import {FlatList, StyleSheet, Text, View, Image, ScrollView, TouchableHighlight} from "react-native";
-import {BaseNavigator} from "./BaseNavigator";
-import Gallery from "react-native-image-gallery";
+const SideMenu = require('react-native-side-menu').default;
+import {
+    FlatList,
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    Dimensions,
+    TouchableOpacity,
+    ActivityIndicator,
+    AsyncStorage
+} from "react-native";
+import {BaseNavigator} from "../navigation/BaseNavigator";
+
 import {Actions} from "react-native-router-flux";
+import ImageClass from "./galary/image/image";
+import {RestApi} from "./RestApi/RestApi";
+import Menu from "./Menu";
+
+
+
+const numColumns = 3;
+
+
+const formatData = (data, numColumns) => {
+    const numberOfFullRows = Math.floor(data.length / numColumns);
+
+    let numberOfElementsLastRow = data.length - (numberOfFullRows * numColumns);
+    while (numberOfElementsLastRow !== numColumns && numberOfElementsLastRow !== 0) {
+        data.push({ key: `blank-${numberOfElementsLastRow}`, empty: true });
+        numberOfElementsLastRow++;
+    }
+
+    return data;
+};
 
 
 export class HomeScreen extends Component {
+
+
     constructor(props) {
         super(props);
         this.state = {
+            images:new Array(),
             isOpen: false,
-            selectedTab: 'profile'
+            selectedTab: 'profile',
+            isLoading: true,
+            soruceImageArr:[],
+            imageUriArr:[]
+
         }
         this.toggleSideMenu = this.toggleSideMenu.bind(this)
     }
 
-    changeTab (selectedTab) {
-        this.setState({selectedTab})
-    }
 
     toggleSideMenu () {
         this.setState({
             isOpen: !this.state.isOpen
         })
     }
-    toggelMenu() {
 
-        if (this.state.isOpen) {
-            let data = ['setting', 'about us', 'help','logout'];
-            return (<View>
-                {data.map(e => {
-                    return (<Text style={styles.item}>{e}</Text>);
-                })}
-            </View>);
-        } else {
-            return (<View/>)
+
+
+
+    openGallery(imageList,srcImageList,imagePosition){
+        Actions.galleryPage({imageList:imageList,srcImageList:srcImageList,position:imagePosition});
+    }
+
+    initSrcImageArr(soruceImageArr){
+        let srcImageArr = new Array();
+        soruceImageArr.forEach(image=>{
+
+            srcImageArr.push({key:{source:{uri:image.source}}})
+        });
+        return srcImageArr;
+    }
+
+    insertPhotoInfoFromDb(responseJson){
+
+        let photoInfoArr = new Array();
+        responseJson.map(photo=>{
+            photoInfoArr.push(new ImageClass(photo.id,
+                                             photo.src,
+                                             photo.description,
+                                             photo.location,
+                                             photo.tagArr))
+        })
+
+        return photoInfoArr;
+    }
+
+    initImagesUri(photoInfo){
+        let imageUriArr = new Array();
+        photoInfo.forEach(image=>{
+
+            imageUriArr.push({source:{uri:image.source}})
+        });
+        return imageUriArr;
+    }
+   async getPhotoFromDb(){
+
+        let personId = await AsyncStorage.getItem("personId");
+        let dbResult = await RestApi.getGalleryFromDb(personId);
+        let photoInfo = this.insertPhotoInfoFromDb(dbResult);
+        let soruceImageArr = this.initSrcImageArr(photoInfo);
+        let temp = this.initImagesUri(photoInfo);
+        this.setState({
+            isLoading: false,
+            images: photoInfo,
+            soruceImageArr: soruceImageArr,
+            imageUriArr:temp
+        })
+    }
+    componentDidMount(){
+        return(this.getPhotoFromDb());
+    }
+
+    
+
+    renderItem = ({ item, index }) => {
+        if (item.empty === true) {
+            return <View style={[styles.item, styles.itemInvisible]}/>;
         }
-    }
-// <HeaderApp func = {this.toggleSideMenu.bind(this)}></HeaderApp>
-// {this.toggelMenu()}
-
-    openGallery(){
-        console.log("here")
-        Actions.galleryPage();
-    }
-    render() {
-
 
 
         return (
+            <View
+                style={styles.item}
+            >
+                <TouchableOpacity key={item.key}
+                                  onPress={() => this.openGallery(this.state.images,this.state.imageUriArr,index)}>
+                    <Image
+                        style={{width: 120, height: 120}}
+                        source={item.key.source}/>
+                </TouchableOpacity>
+            </View>
+        );
+    };
+
+    checkRefreshNeeds(){
+
+        if(this.props.refresh == "ruli"){
+            this.props.refresh="np"
+            this.getPhotoFromDb();
+        }
+    }
+    componentWillReceiveProps(props){
+
+    }
+    render() {
+
+        this.checkRefreshNeeds();
+
+        if(this.state.isLoading){
+            console.log("loading..")
+            return(
+                <View style={{zIndex:1}}>
+                    <ActivityIndicator size="large" color="black" />
+                </View>
+            )
+        }
+
+
+        return (
+            <SideMenu menu={<Menu/>}>
             <View style={{
                 flex: 1,
-                backgroundColor: 'grey'
-            }}>
-                 <HeaderApp func = {this.toggleSideMenu.bind(this)}></HeaderApp>
-                 {this.toggelMenu()}
-                <TouchableHighlight onPress={this.openGallery}>
-                <Image
-                    style={{width: 80, height: 80}}
-                    source={require('../images/images.jpg')}
+                backgroundColor: 'white',
+                }}>
+
+                <HeaderApp func = {this.toggleSideMenu.bind(this)}></HeaderApp>
+                <FlatList
+                    style={{flex:1}}
+                    data={formatData(this.state.soruceImageArr, numColumns)}
+                    renderItem={this.renderItem}
+                    numColumns={numColumns}
                 />
-                </TouchableHighlight>
+                    <BaseNavigator/>
+                </View>
+            </SideMenu>
 
 
-                <BaseNavigator/>
-            </View>
+
 
 
         )
     }
 }
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        paddingTop: 20
-    },
     item: {
-        padding: 10,
-        fontSize: 18,
-        height: 30,
+        backgroundColor: '#4D243D',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        margin: 1,
+        height: Dimensions.get('window').width / numColumns, // approximate a square
+    },
+    itemInvisible: {
+        backgroundColor: 'transparent',
+    },
+    itemText: {
+        color: '#fff',
     },
 })

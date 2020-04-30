@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {KeyboardAvoidingView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import firebase from 'firebase';
 import Button from "../Common/Button/Button";
 import Card from "../Common/card/Card";
@@ -24,7 +24,10 @@ class LoginForm extends Component {
     signup() {
         Actions.sighUp()
     }
-
+    forgotPassword(){
+        // Actions.forgotPassword();
+        console.log('forgot password');
+    }
 
     render() {
         return(
@@ -32,6 +35,7 @@ class LoginForm extends Component {
 
                 <Logo/>
                 <Form/>
+
                 <View style={styles.signupTextCont}>
                     <Text style={styles.signupText}>Don't have an account yet?</Text>
                     <TouchableOpacity onPress={this.signup}><Text style={styles.signupButton}> Sign up</Text></TouchableOpacity>

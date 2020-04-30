@@ -1,18 +1,16 @@
 import React from 'react';
 import { Router, Scene } from 'react-native-router-flux';
-import AcountOption from "./src/AcountOptions/AcountOption"
 import Login from "./src/Authentication/Autontication";
 import SignUpView from "./src/createAcount/Sigh-Up-View";
-import Home, {HomeScreen} from "./src/Home/home";
+import  {HomeScreen} from "./src/Home/home";
 import AcountOptions from "./src/AcountOptions/AcountOptionsWithReactElements";
-import HeaderApp from "./src/Home/Header";
 import {GallerySlide} from "./src/Home/galary/galarySlide"
-import Icon from "react-native-vector-icons/Entypo";
-import {TouchableOpacity, View} from "react-native";
 import {Upload} from "./src/Home/upload/upload";
 import {TagPeople} from "./src/Home/upload/tagPeople/TagPeople";
 import DeceasedForm from "./src/createAcount/DeceasedForm";
 import UserForget from "./src/Authentication/UserForget";
+import LoginHelp from "./src/Authentication/LoginHelp";
+import AccessAccount from "./src/Authentication/AccessAccount";
 
 
 
@@ -55,6 +53,8 @@ export default class App extends React.Component {
                     >
                     </Scene>
 
+
+
                     <Scene
                         key="deceasedForm"
                         component={DeceasedForm}
@@ -68,7 +68,18 @@ export default class App extends React.Component {
                         key="userForget"
                         component={UserForget}
                         title="forget details"
-
+                    >
+                    </Scene>
+                    <Scene
+                        key="loginHelp"
+                        component={LoginHelp}
+                        title="Login Help"
+                    >
+                    </Scene>
+                    <Scene
+                        key="accessAccount"
+                        component={AccessAccount}
+                        title="Access your account"
 
                     >
                     </Scene>

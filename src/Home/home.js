@@ -101,14 +101,9 @@ export class HomeScreen extends Component {
     }
    async getPhotoFromDb(){
 
-        console.log("1")
         let personId = await AsyncStorage.getItem("personId");
-        console.log(personId)
-       console.log("2")
         let dbResult = await RestApi.getGalleryFromDb(personId);
-       console.log("3")
         let photoInfo = this.insertPhotoInfoFromDb(dbResult);
-       console.log("4")
         let soruceImageArr = this.initSrcImageArr(photoInfo);
         let temp = this.initImagesUri(photoInfo);
         this.setState({
@@ -119,7 +114,6 @@ export class HomeScreen extends Component {
         })
     }
     componentDidMount(){
-        console.log("get from photo from db");
         return(this.getPhotoFromDb());
     }
 
@@ -147,16 +141,12 @@ export class HomeScreen extends Component {
 
     checkRefreshNeeds(){
 
-        console.log(this.props.refresh)
-        console.log("refresh function")
         if(this.props.refresh == "ruli"){
-            console.log("refresh")
             this.props.refresh="np"
             this.getPhotoFromDb();
         }
     }
     componentWillReceiveProps(props){
-        console.log(props.refresh)
 
     }
     render() {

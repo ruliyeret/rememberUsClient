@@ -1,7 +1,6 @@
 import React, {Component} from 'react'
 import {Alert, Image, KeyboardAvoidingView, StyleSheet, TextInput, View} from "react-native";
 import {Button} from "react-native-elements";
-import email from 'react-native-email'
 import {RestApi} from "../Home/RestApi/RestApi";
 export default class UserForget extends Component {
 
